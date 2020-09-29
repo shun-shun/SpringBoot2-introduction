@@ -43,4 +43,14 @@ public class HeloController {
 		model.addAttribute("msg", res);
 		return "index";
 	}
+
+	@RequestMapping("/other")
+	public String other() {
+		return "redirect:/";
+	}
+
+	@RequestMapping("/home")
+	public String home() {
+		return "forward:/";
+	}
 }
