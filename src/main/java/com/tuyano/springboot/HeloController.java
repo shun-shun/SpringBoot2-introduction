@@ -11,7 +11,6 @@ public class HeloController {
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(Model model) {
-		model.addAttribute("msg", "フォームを送信ください。");
 		return "index";
 	}
 

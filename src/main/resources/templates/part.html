@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>top page</title>
+<title>part page</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
 	h1 {
@@ -15,12 +15,21 @@
 		margin: 5px 25px;
 	}
 </style>
-<style th:include="part :: frag_style"></style>
+<style th:fragment="frag_style">
+	div.fragment {
+		border: solid 3px lightgray;
+		padding: 0px 20px
+	}
+</style>
 </head>
 <body>
-	<h1 th:text="#{content.title}">Hello page</h1>
-	<div th:include="part :: frag_body">
-		<p> this is original content.</p>
+	<h1>Part page</h1>
+	<div th:fragment="frag_body">
+		<h2>fragment</h2>
+		<div class="fragment">
+			<p> this is framgnet content.</p>
+			<p>sample message..</p>
+		</div>
 	</div>
 </body>
 </html>
