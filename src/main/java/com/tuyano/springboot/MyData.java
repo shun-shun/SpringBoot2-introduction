@@ -26,19 +26,20 @@ public class MyData {
 	private long id;
 
 	@Column(length = 50, nullable = false)
-	@NotEmpty
+	@NotEmpty(message = "空白は不可")
 	private String name;
 
 	@Column(length = 200, nullable = true)
-	@Email
+	@Email(message = "メールアドレスのみ")
 	private String mail;
 
 	@Column(nullable = true)
-	@Min(0)
-	@Max(200)
+	@Min(value = 0, message = "ゼロ以上")
+	@Max(value = 200, message = "200以下")
 	private Integer age;
 
 	@Column(nullable = true)
+	@Phone(onlyNumber = true)
 	private String memo;
 
 	public long getId() {
