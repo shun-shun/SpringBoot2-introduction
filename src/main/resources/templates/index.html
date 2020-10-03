@@ -31,28 +31,35 @@
 		color: black;
 		background: #f0f0f0;
 	}
+	.err {
+		color: red;
+	}
 </style>
 </head>
 
 <body>
-	<h1>Index page</h1>
+	<h1 th:text="#{content.title}">Helo page</h1>
+	<p th:text="${msg}"></p>
 	<table>
 		<form method="post" action="/" th:object="${formModel}">
+			<ul>
+				<li th:each="error : ${#fields.detailedErrors()}" class="err" th:text="${error.message}" />
+			</ul>
 			<tr>
 				<td><label for="name">名前</label></td>
-				<td><input type="text" name="name" th:value="*{name}" /></td>
+				<td><input type="text" name="name" th:field="*{name}" /></td>
 			</tr>
 			<tr>
 				<td><label for="age">年齢</label></td>
-				<td><input type="text" name="age" th:value="*{age}" /></td>
+				<td><input type="text" name="age" th:field="*{age}" /></td>
 			</tr>
 			<tr>
 				<td><label for="mail">メール</label></td>
-				<td><input type="text" name="mail" th:value="*{mail}" /></td>
+				<td><input type="text" name="mail" th:field="*{mail}" /></td>
 			</tr>
 			<tr>
 				<td><label for="memo">メモ</label></td>
-				<td><textarea name="memo" rows="5" cols="20" th:text="*{memo}"></textarea></td>
+				<td><textarea name="memo" rows="5" cols="20" th:field="*{memo}"></textarea></td>
 			</tr>
 			<tr><td><input type="submit" /></td></tr>
 		</form>

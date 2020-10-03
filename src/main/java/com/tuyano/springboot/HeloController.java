@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +50,7 @@ public class HeloController {
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("formModel") MyData myData, Model model) {
 		model.addAttribute("msg", "this is sample content.");
+		model.addAttribute("formModel", myData);
 		Iterable<MyData> list = repository.findAll();
 		model.addAttribute("datalist", list);
 		return "index";
@@ -55,9 +58,15 @@ public class HeloController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@Transactional(readOnly = false)
-	public String form(@ModelAttribute("formModel") MyData myData, Model model) {
-		repository.saveAndFlush(myData);
-		return "redirect:/";
+	public String form(@ModelAttribute("formModel") @Validated MyData myData, BindingResult result, Model model) {
+		if(!result.hasErrors()) {
+			repository.saveAndFlush(myData);
+			return "redirect:/";
+		}
+		model.addAttribute("msg", "sorry, error is occured...");
+		Iterable<MyData> list = repository.findAll();
+		model.addAttribute("datalist", list);
+		return "index";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
