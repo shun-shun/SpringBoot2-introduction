@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tuyano.springboot.repositories.MyDataRepository;
 
@@ -67,4 +68,18 @@ public class HeloController {
 		return "edit";
 	}
 
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String delete(@PathVariable int id, Model model) {
+		model.addAttribute("title", "delete mydata.");
+		Optional<MyData> data = repository.findById((long)id);
+		model.addAttribute("formModel", data.get());
+		return "delete";
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@Transactional(readOnly = false)
+	public String remove(@RequestParam long id, Model model) {
+		repository.deleteById(id);
+		return "redirect:/";
+	}
 }
