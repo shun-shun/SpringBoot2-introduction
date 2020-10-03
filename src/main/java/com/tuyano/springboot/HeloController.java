@@ -1,6 +1,8 @@
 package com.tuyano.springboot;
 
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -54,6 +57,14 @@ public class HeloController {
 	public String form(@ModelAttribute("formModel") MyData myData, Model model) {
 		repository.saveAndFlush(myData);
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String edit(@ModelAttribute MyData myData, @PathVariable int id, Model model) {
+		model.addAttribute("title", "edit mydata.");
+		Optional<MyData> data = repository.findById((long)id);
+		model.addAttribute("formModel", data.get());
+		return "edit";
 	}
 
 }
