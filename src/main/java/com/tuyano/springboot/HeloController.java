@@ -29,6 +29,9 @@ public class HeloController {
 	@Autowired
 	private MyDataService service;
 
+	@Autowired
+	MyDataBean myDataBean;
+
 	@PostConstruct
 	public void init() {
 		MyData d1 = new MyData();
@@ -118,5 +121,14 @@ public class HeloController {
 	public String remove(@RequestParam long id, Model model) {
 		repository.deleteById(id);
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String indexById(@PathVariable long id, Model model) {
+		model.addAttribute("title", "Pickup Page");
+		String table = "<table>" + myDataBean.getTableTagById(id) + "</table>";
+		model.addAttribute("msg", "pickup data id = " + id);
+		model.addAttribute("data", table);
+		return "pickup";
 	}
 }
