@@ -4,8 +4,6 @@ package com.tuyano.springboot;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +26,11 @@ public class HeloController {
 	@Autowired
 	MyDataRepository repository;
 
-	@PersistenceContext
-	EntityManager entityManager;
-
-	MyDataDaoImpl dao;
+	@Autowired
+	private MyDataService service;
 
 	@PostConstruct
 	public void init() {
-		dao = new MyDataDaoImpl(entityManager);
-
 		MyData d1 = new MyData();
 		d1.setName("tuyano");
 		d1.setAge(123);
@@ -59,8 +53,9 @@ public class HeloController {
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("formModel") MyData myData, Model model) {
+		model.addAttribute("title", "Find Page");
 		model.addAttribute("msg", "MyDataのサンプルです。");
-		Iterable<MyData> list = dao.getAll();
+		Iterable<MyData> list = service.getAll();
 		model.addAttribute("datalist", list);
 		return "index";
 	}
@@ -70,7 +65,7 @@ public class HeloController {
 		model.addAttribute("title", "Find Page");
 		model.addAttribute("msg", "MyDataのサンプルです。");
 		model.addAttribute("value", "");
-		Iterable<MyData> list = dao.getAll();
+		Iterable<MyData> list = service.getAll();
 		model.addAttribute("datalist", list);
 		return "find";
 	}
@@ -84,7 +79,7 @@ public class HeloController {
 		model.addAttribute("title", "Find result");
 		model.addAttribute("msg", "「" + param + "」の検索結果");
 		model.addAttribute("value", param);
-		Iterable<MyData> list = dao.find(param);
+		Iterable<MyData> list = service.find(param);
 		model.addAttribute("datalist", list);
 		return "find";
 	}
