@@ -4,6 +4,8 @@ package com.tuyano.springboot;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,8 +27,15 @@ public class HeloController {
 	@Autowired
 	MyDataRepository repository;
 
+	@PersistenceContext
+	EntityManager entityManager;
+
+	MyDataDaoImpl dao;
+
 	@PostConstruct
 	public void init() {
+		dao = new MyDataDaoImpl(entityManager);
+
 		MyData d1 = new MyData();
 		d1.setName("tuyano");
 		d1.setAge(123);
@@ -49,9 +58,8 @@ public class HeloController {
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("formModel") MyData myData, Model model) {
-		model.addAttribute("msg", "this is sample content.");
-		model.addAttribute("formModel", myData);
-		Iterable<MyData> list = repository.findAll();
+		model.addAttribute("msg", "MyDataのサンプルです。");
+		Iterable<MyData> list = dao.getAll();
 		model.addAttribute("datalist", list);
 		return "index";
 	}
