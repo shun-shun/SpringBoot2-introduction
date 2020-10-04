@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -130,5 +132,14 @@ public class HeloController {
 		model.addAttribute("msg", "pickup data id = " + id);
 		model.addAttribute("data", table);
 		return "pickup";
+	}
+
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public String index(Model model, Pageable pageable) {
+		model.addAttribute("title", "Find Page");
+		model.addAttribute("msg", "MyDataのサンプルです。");
+		Page<MyData> list = repository.findAll(pageable);
+		model.addAttribute("datalist", list);
+		return "index";
 	}
 }

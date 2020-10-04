@@ -50,5 +50,10 @@
 			<td th:text="${obj.memo}"></td>
 		</tr>
 	</table>
+	<div>
+		<a my:mypage="${datalist.getNumber() - 1}">&lt;&lt;prev</a>
+		|
+		<a my:mypage="${datalist.getNumber() + 1}">next&gt;&gt;</a>
+	</div>
 </body>
 </html>
