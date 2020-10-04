@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,30 @@ public class HeloController {
 		Iterable<MyData> list = dao.getAll();
 		model.addAttribute("datalist", list);
 		return "index";
+	}
+
+	@RequestMapping(value="/find", method = RequestMethod.GET)
+	public String find(Model model) {
+		model.addAttribute("title", "Find Page");
+		model.addAttribute("msg", "MyDataのサンプルです。");
+		model.addAttribute("value", "");
+		Iterable<MyData> list = dao.getAll();
+		model.addAttribute("datalist", list);
+		return "find";
+	}
+
+	@RequestMapping(value="/find", method = RequestMethod.POST)
+	public String search(HttpServletRequest request, Model model) {
+		String param = request.getParameter("fstr");
+		if(param == "") {
+			return "redirect:/find";
+		}
+		model.addAttribute("title", "Find result");
+		model.addAttribute("msg", "「" + param + "」の検索結果");
+		model.addAttribute("value", param);
+		Iterable<MyData> list = dao.find(param);
+		model.addAttribute("datalist", list);
+		return "find";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
